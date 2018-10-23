@@ -1,6 +1,5 @@
-node_modules
-.idea
-.next
+.idea/
+.next/
 
 .vscode
 .DS_Store
