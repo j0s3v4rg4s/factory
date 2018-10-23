@@ -1,0 +1,9 @@
+node_modules
+.idea
+.next
+
+.vscode
+.DS_Store
+
+# Dependencies
+node_modules/
