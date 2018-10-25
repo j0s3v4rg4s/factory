@@ -1,17 +1,15 @@
 import * as React from "react";
-import Button from '@material-ui/core/Button';
+import FormLogin from "../login/components/FormLogin";
 
 class Login extends React.Component {
-    render() {
-        return (
-            <div>
-                Login
-                <Button variant="contained" color="primary">
-                    Hello World
-                </Button>
-            </div>
-        )
-    }
+  render() {
+
+    return (
+      <div>
+        <FormLogin/>
+      </div>
+    );
+  }
 }
 
 export default Login;
