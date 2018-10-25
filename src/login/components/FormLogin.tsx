@@ -32,6 +32,8 @@ class FormLogin extends React.Component<IProps, IState> {
     super(props);
     this.emailValid = new FormControl([Validators.required(), Validators.email()]);
     this.passValid = new FormControl([Validators.required(), Validators.minLength(6)]);
+
+
     this.state = {
       email: {
         error: [],
