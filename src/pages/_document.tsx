@@ -7,24 +7,25 @@ export default class MyDocument extends Document {
     // Static
     // ***************************************************************************
     static async getInitialProps(ctx) {
+
         let pageContext;
-        const page = ctx.renderPage(Component => {
+        const transform = Component => {
             return props => {
                 pageContext = props.pageContext;
-                return <Component {...props} />;
+                return <Component {...props}/>
             };
-        });
-        const initialProps = await Document.getInitialProps(ctx);
+        };
+        const page = ctx.renderPage(transform);
+        const styles = flush();
         return {
             ...page,
-            ...initialProps,
             styles: (
                 <React.Fragment>
                     <style
-                        id="jss-server-side"
-                        dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
+                    id="jss-server-side"
+                    dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
                     />
-                    {flush() || null}
+                    {styles || null}
                 </React.Fragment>
             ),
         };
