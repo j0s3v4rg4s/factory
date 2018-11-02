@@ -4,8 +4,11 @@ import App, { Container } from "next/app";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider } from "@material-ui/core/styles";
 import getPageContext from "../core/config/theme";
+import withRedux from "next-redux-wrapper";
+import store from "../redux";
+import { Provider } from "react-redux";
 
-class MyApp extends App {
+class MyApp extends App<{ store: any }> {
     // ***************************************************************************
     // Static
     // ***************************************************************************
@@ -47,7 +50,7 @@ class MyApp extends App {
     // ***************************************************************************
 
     render() {
-        const { Component, pageProps } = this.props;
+        const { Component, pageProps, store } = this.props;
 
         return (
             <Container>
@@ -57,7 +60,9 @@ class MyApp extends App {
                 >
                     <MuiThemeProvider theme={this.pageContext.theme} sheetsManager={this.pageContext.sheetsManager}>
                         <CssBaseline />
-                        <Component pageContext={this.pageContext} {...pageProps} />
+                        <Provider store={store}>
+                            <Component pageContext={this.pageContext} {...pageProps} />
+                        </Provider>
 
                         {/*language=CSS*/}
                         <style jsx global>{`
@@ -76,4 +81,4 @@ class MyApp extends App {
     }
 }
 
-export default MyApp;
+export default withRedux(store)(MyApp);

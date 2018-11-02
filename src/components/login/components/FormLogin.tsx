@@ -4,11 +4,26 @@ import Card from "@material-ui/core/Card/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { withStyles } from "@material-ui/core/styles";
 import { FormEvent } from "react";
-import { Validators } from "../../core/utilities/formValid";
-import FormValidator from "../../core/components/FormValidator";
+import { Validators } from "../../../core/utilities/formValid/index";
+import FormValidator from "../../../core/components/FormValidator";
+import { connect } from "react-redux";
+import { ILoginState } from "../../../redux/actions/login";
 
 type IProps = {
     classes?: any;
+    submit: (email: string, pass: string) => void;
+    login: ILoginState;
+};
+
+type IState = {
+    emailValid: {
+        valid: boolean;
+        value: string;
+    };
+    passValid: {
+        valid: boolean;
+        value: string;
+    };
 };
 
 const styles = {
@@ -19,15 +34,25 @@ const styles = {
     },
 };
 
-class FormLogin extends React.Component<IProps> {
+class FormLogin extends React.Component<IProps, IState> {
+    state = {
+        emailValid: {
+            valid: true,
+            value: "",
+        },
+        passValid: {
+            valid: true,
+            value: "",
+        },
+    };
     handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(this.state);
+        this.props.submit(this.state.emailValid.value, this.state.passValid.value);
     };
 
     render() {
         const { classes } = this.props;
-
+        console.log(this.props.login);
         return (
             <Card raised={true} className={classes.card}>
                 <CardContent>
@@ -41,6 +66,7 @@ class FormLogin extends React.Component<IProps> {
                             fullWidth={true}
                             type={"email"}
                             validators={[Validators.required("Campo requerido"), Validators.email("Email inválido")]}
+                            valid={valid => this.setState({ emailValid: valid })}
                         />
 
                         <FormValidator
@@ -52,10 +78,17 @@ class FormLogin extends React.Component<IProps> {
                             required={true}
                             fullWidth={true}
                             type={"password"}
+                            valid={valid => this.setState({ passValid: valid })}
                         />
 
-                        <Button color="primary" fullWidth={true} variant="contained" type="submit">
-                            Entrar
+                        <Button
+                            disabled={!(this.state.emailValid.valid && this.state.passValid.valid)}
+                            color="primary"
+                            fullWidth={true}
+                            variant="contained"
+                            type="submit"
+                        >
+                            {this.props.login && this.props.login.isLogin ? '': 'Entrar 2'}
                         </Button>
                     </form>
                 </CardContent>
@@ -64,4 +97,12 @@ class FormLogin extends React.Component<IProps> {
     }
 }
 
-export default withStyles(styles)(FormLogin);
+const mapStateToProps = ({ userReducer }) => {
+    const { login } = userReducer;
+    return { login };
+};
+
+export default connect(
+    mapStateToProps,
+    null
+)(withStyles(styles)(FormLogin));
