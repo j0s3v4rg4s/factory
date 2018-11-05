@@ -10,10 +10,12 @@
     "@material-ui/icons": "^3.0.1",
     "@zeit/next-typescript": "1.1.1",
     "babel-loader": "^8.0.4",
+    "firebase": "^5.5.7",
     "next": "^7.0.2",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-jss": "^8.6.1",
+    "react-redux-firebase": "^2.1.9",
     "typescript": "latest",
     "typescript-babel-jest": "^1.0.5"
   },
