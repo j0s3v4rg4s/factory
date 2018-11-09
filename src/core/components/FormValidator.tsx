@@ -6,6 +6,7 @@ import { ChangeEvent } from "react";
 type IProps = {
     validators: validator[];
     id: string;
+    valid: (update: { valid: boolean, value: string }) => void;
 } & TextFieldProps;
 
 type IState = {
@@ -33,17 +34,29 @@ class FormValidator extends React.Component<IProps, IState> {
     }
 
     // ***************************************************************************
+    // Life cycle
+    // ***************************************************************************
+
+    componentDidMount() {
+        this.validateField(this.state.value);
+    }
+
+    // ***************************************************************************
     // Methods
     // ***************************************************************************
 
     validateField = (value: string) => {
+        const errors = [];
+        this.props.validators.forEach(fn => {
+            const err = fn(value);
+            if (err) {
+                errors.push(err);
+            }
+        });
         if (this.isFocus) {
-            const errors = [];
-            this.props.validators.forEach(fn => {
-                const err = fn(value);
-                if (err) {
-                    errors.push(err);
-                }
+            this.props.valid({
+                valid: errors.length === 0,
+                value
             });
             return {
                 error: errors,
@@ -51,11 +64,15 @@ class FormValidator extends React.Component<IProps, IState> {
                 value: value,
             };
         } else {
+            this.props.valid({
+                valid: errors.length === 0,
+                value
+            });
             return {
                 error: [],
                 valid: true,
                 value: value,
-            }
+            };
         }
     };
 
@@ -69,9 +86,11 @@ class FormValidator extends React.Component<IProps, IState> {
     };
 
     render() {
+        const defaultProps = {...this.props};
+        delete defaultProps["valid"];
         return (
             <TextField
-                {...this.props}
+                {...defaultProps}
                 onChange={this.handle}
                 value={this.state.value}
                 error={!this.state.valid}
