@@ -1,7 +1,7 @@
-export * from "./types";
+export * from './types';
 
-import { ActionsType } from "../interfaces";
-import {ILoginState, LOGIN, LOGIN_COMPLETE} from "./types";
+import { ActionsType } from '../interfaces';
+import { ILoginState, LOGIN, LOGIN_COMPLETE } from './types';
 
 export const loginAction = (email: string, pass: string): ActionsType<ILoginState> => {
     return {
@@ -13,6 +13,6 @@ export const loginAction = (email: string, pass: string): ActionsType<ILoginStat
 export const loginComplete = (): ActionsType<ILoginState> => {
     return {
         type: LOGIN_COMPLETE,
-        payload: { email: "", pass: "", isLogin: false },
+        payload: { email: 'hola', pass: '123', isLogin: false },
     };
 };

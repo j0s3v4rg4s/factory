@@ -7,6 +7,7 @@ import getPageContext from "../core/config/theme";
 import withRedux from "next-redux-wrapper";
 import store from "../redux";
 import { Provider } from "react-redux";
+import Firebase from "../core/lib/firebase";
 
 class MyApp extends App<{ store: any }> {
     // ***************************************************************************
@@ -17,7 +18,8 @@ class MyApp extends App<{ store: any }> {
         if (Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx);
         }
-        return { pageProps };
+        Firebase.getInstance();
+        return { pageProps};
     }
 
     // ***************************************************************************
@@ -51,7 +53,7 @@ class MyApp extends App<{ store: any }> {
 
     render() {
         const { Component, pageProps, store } = this.props;
-
+        const firebaseInstance = Firebase.getInstance();
         return (
             <Container>
                 <JssProvider
@@ -61,7 +63,7 @@ class MyApp extends App<{ store: any }> {
                     <MuiThemeProvider theme={this.pageContext.theme} sheetsManager={this.pageContext.sheetsManager}>
                         <CssBaseline />
                         <Provider store={store}>
-                            <Component pageContext={this.pageContext} {...pageProps} />
+                            <Component pageContext={this.pageContext} {...pageProps} firebaseInstance={firebaseInstance} />
                         </Provider>
 
                         {/*language=CSS*/}
